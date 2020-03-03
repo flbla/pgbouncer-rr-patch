@@ -58,6 +58,7 @@ bool route_client_connection(PgSocket *client, PktHdr *pkt) {
 	}
 
 	slog_debug(client, "route_client_connection: Username => %s", client->auth_user->name);
+	slog_debug(client, "route_client_connection: Database name => %s", client->db->name);
 	slog_debug(client, "route_client_connection: Query => %s", query_str);
 
 	if (strcmp(cf_routing_rules_py_module_file, "not_enabled") == 0) {
@@ -66,7 +67,7 @@ bool route_client_connection(PgSocket *client, PktHdr *pkt) {
 		return true;
 	}
 
-	dbname = pycall(client, client->auth_user->name, query_str, cf_routing_rules_py_module_file,
+	dbname = pycall(client, client->auth_user->name, client->db->name, query_str, cf_routing_rules_py_module_file,
 			"routing_rules");
 	if (dbname == NULL) {
 		slog_debug(client, "routing_rules returned 'None' - existing connection preserved");

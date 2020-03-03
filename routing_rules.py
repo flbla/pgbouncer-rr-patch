@@ -37,7 +37,7 @@ routingtable = {
 # IMPLEMENTS REGEX RULES DEFINED IN ROUTINGTABLE OBJECT
 # RETURNS FIRST MATCH FOUND
 import re
-def routing_rules(username, query):
+def routing_rules(username, databasename, query):
 	for route in routingtable['route']:
 		u = re.compile(route['usernameRegex'])
 		q = re.compile(route['queryRegex'])

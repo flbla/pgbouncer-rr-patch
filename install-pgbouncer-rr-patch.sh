@@ -33,11 +33,13 @@ MERGEFILES="\
    Makefile\
    src/client.c\
    src/main.c\
+   src/objects.c\
    include/bouncer.h\
    "
 for file in $MERGEFILES
 do
    echo Merging pgbouncer-rr changes to: $PGDIR/$file
+   echo "patch -d $PGDIR -f -b -p1 < $PATCHDIR/$file.diff || patchstatus=1"
    patch -d $PGDIR -f -b -p1 < $PATCHDIR/$file.diff || patchstatus=1
 done
 

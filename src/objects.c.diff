@@ -1,0 +1,11 @@
+--- ./src/objects.c	2020-03-03 12:51:27.267195763 +0100
++++ ./src/objects.c.orig	2020-03-03 12:42:32.821850198 +0100
+@@ -309,7 +309,7 @@
+ 	statlist_for_each(item, list) {
+ 		res = cmpfn(item, newitem);
+ 		if (res == 0) {
+-			fatal("put_in_order: found existing elem");
++			printf("put_in_order: found existing elem");
+ 		} else if (res > 0) {
+ 			statlist_put_before(list, newitem, item);
+ 			return;
