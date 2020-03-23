@@ -89,8 +89,8 @@ char *pycall(PgSocket *client, char *username, char *databasename, char *query_s
 		goto finish;
 	}
 
-	/* Call function with 3 arguments - username, databasename and query_str */
-	pArgs = PyTuple_New(3);
+	/* Call function with 4 arguments - username, databasename, query_str and transaction */
+	pArgs = PyTuple_New(4);
 	if (pArgs == NULL) {
 		slog_error(client, "Python module <%s>: out of memory", py_module);
 		goto finish;
