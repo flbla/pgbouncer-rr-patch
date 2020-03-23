@@ -113,6 +113,19 @@ char *pycall(PgSocket *client, char *username, char *databasename, char *query_s
 		goto finish;
 	}
 	PyTuple_SetItem(pArgs, 2, pValue);
+	/* Transaction check */
+	if (client->xact_start) {
+		if (client->query_start - client->xact_start > 0) {
+			pValue = PyString_FromString("True");
+		}
+		else {
+			pValue = PyString_FromString("False");
+		}
+	}
+	else {
+		pValue = PyString_FromString("False");
+	}
+	PyTuple_SetItem(pArgs, 3, pValue);
 	pValue = PyObject_CallObject(pFunc, pArgs);
 	if (pValue == NULL) {
 		slog_error(client, "Python Function <%s> failed to return a value",
