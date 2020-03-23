@@ -1,6 +1,6 @@
---- ../pgbouncer/src/client.c
-+++ ./src/client.c
-@@ -446,10 +446,10 @@ static bool decide_startup_pool(PgSocket *client, PktHdr *pkt)
+--- ./src/client.c.orig	2020-03-23 17:42:20.897099913 +0100
++++ ./src/client.c	2020-03-23 17:45:56.971170080 +0100
+@@ -464,10 +464,10 @@
  		} else if (strcmp(key, "application_name") == 0) {
  			set_appname(client, val);
  			appname_found = true;
@@ -13,17 +13,24 @@
  		} else {
  			slog_warning(client, "unsupported startup parameter: %s=%s", key, val);
  			disconnect_client(client, true, "unsupported startup parameter: %s", key);
-@@ -678,6 +678,14 @@ static bool handle_client_work(PgSocket *client, PktHdr *pkt)
+@@ -692,10 +692,21 @@
+ 		client->pool->stats.xact_count++;
+ 		client->xact_start = client->query_start;
+ 	}
++	else {
++		client->transaction = 'True'
++	}
+ 
  	if (client->pool->db->admin)
  		return admin_handle_client(client, pkt);
  
-+        /* pgbouncer-rr extensions: query rewrite & client connection routing */
-+        if (pkt->type == 'Q' || pkt->type == 'P') {
-+                if (!rewrite_query(client, pkt)) {
-+                        return false;
-+                }
-+                route_client_connection(client, pkt);
-+        }
++	/* pgbouncer-rr extensions: query rewrite & client connection routing */
++	if (pkt->type == 'Q' || pkt->type == 'P') {
++		if (!rewrite_query(client, pkt)) {
++			return false;
++		}
++		route_client_connection(client, pkt);
++	}
 +
  	/* acquire server */
  	if (!find_server(client))

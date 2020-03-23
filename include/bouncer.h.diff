@@ -1,9 +1,6 @@
---- /home/ec2-user/TEST/pgbouncer/include/bouncer.h	2015-12-08 17:31:44.635667172 -0500
-+++ ./include/bouncer.h	2015-12-08 14:57:27.525236201 -0500
-@@ -88,12 +88,17 @@ typedef struct PgStats PgStats;
- typedef union PgAddr PgAddr;
- typedef enum SocketState SocketState;
- typedef struct PktHdr PktHdr;
+--- ./include/bouncer.h	2020-03-23 17:54:17.616634752 +0100
++++ ./include/bouncer.h.orig	2020-03-23 17:54:13.224584296 +0100
+@@ -87,6 +87,11 @@
  
  extern int cf_sbuf_len;
  
@@ -15,13 +12,16 @@
  #include "util.h"
  #include "iobuf.h"
  #include "sbuf.h"
- #include "pktbuf.h"
- #include "varcache.h"
- #include "dnslookup.h"
-@@ -457,12 +462,17 @@ extern int cf_tcp_defer_accept;
+@@ -364,6 +369,8 @@
+ 	usec_t xact_start;	/* xact start moment */
+ 	usec_t wait_start;	/* waiting start moment */
  
- extern int cf_log_connections;
- extern int cf_log_disconnections;
++	char *transaction;
++
+ 	uint8_t cancel_key[BACKENDKEY_LEN]; /* client: generated, server: remote */
+ 	PgAddr remote_addr;	/* ip:port for remote endpoint */
+ 	PgAddr local_addr;	/* ip:port for local endpoint */
+@@ -468,6 +475,11 @@
  extern int cf_log_pooler_errors;
  extern int cf_application_name_add_host;
  
@@ -33,6 +33,3 @@
  extern int cf_client_tls_sslmode;
  extern char *cf_client_tls_protocols;
  extern char *cf_client_tls_ca_file;
- extern char *cf_client_tls_cert_file;
- extern char *cf_client_tls_key_file;
- extern char *cf_client_tls_ciphers;

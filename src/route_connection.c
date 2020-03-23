@@ -68,7 +68,7 @@ bool route_client_connection(PgSocket *client, PktHdr *pkt) {
 	}
 
 	/* Transaction check */
-	char *transaction;
+	/*char *transaction;
 	if (client->xact_start) {
 		if (client->query_start - client->xact_start > 0) {
 			transaction = "True";
@@ -79,9 +79,9 @@ bool route_client_connection(PgSocket *client, PktHdr *pkt) {
 	}
 	else {
 		transaction = "False";
-	}
+	}*/
 
-	dbname = pycall(client, client->auth_user->name, client->db->name, query_str, transaction, cf_routing_rules_py_module_file,
+	dbname = pycall(client, client->auth_user->name, client->db->name, query_str, client->transaction, cf_routing_rules_py_module_file,
 			"routing_rules");
 	if (dbname == NULL) {
 		slog_debug(client, "routing_rules returned 'None' - existing connection preserved");
